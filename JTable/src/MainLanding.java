@@ -1,77 +1,164 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+ 
+public class MainLanding {
+    final static boolean shouldFill = true;
+    final static boolean shouldWeightX = true;
+    final static boolean RIGHT_TO_LEFT = false;
+     static JFrame frame;
+ 
+    public static void addComponentsToPane(Container pane) {
+        if (RIGHT_TO_LEFT) {
+            pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        }
+ 
+    pane.setLayout(new GridBagLayout());
+    GridBagConstraints c = new GridBagConstraints();
+    
+    c.ipadx = 0;
+    c.weighty = 0;
+    c.weightx = 0;
+    c.ipadx=0;
+    c.gridx = 0;
+    c.gridy = 0;
+    
+    if (shouldFill) {
+    //natural height, maximum width
+    c.fill = GridBagConstraints.HORIZONTAL;
+    }
+ 
+    JButton button = new JButton("Web Application");
+    c.fill = GridBagConstraints.VERTICAL;
+    c.ipadx = 40;
+    c.weighty = 0;
+    c.weightx = 0.5;
+    c.ipadx=120;
+    c.gridx = 1;
+    c.gridy = 1;
+    c.insets = new Insets(50,10,10,10);  //top padding
+    pane.add(button, c);
+ 
+    JButton button1 = new JButton("Desktop Application");
+    c.fill = GridBagConstraints.VERTICAL;
+    c.ipadx = 40;
+    c.weighty = 0;
+    c.ipadx=120;
+    c.weightx = 0.5;
+    c.gridx = 3;
+    c.gridy = 1;
+    c.insets = new Insets(50,10,10,10);  //top padding
+    pane.add(button1, c);
+    
+    JButton button2 = new JButton("Mobile Application");
+    c.fill = GridBagConstraints.VERTICAL;
+    c.ipadx = 40;
+    c.weighty = 0;
+    c.weightx = 0.5;
+    c.ipadx=120;
+    c.gridx = 1;
+    c.gridy = 2;
+    c.insets = new Insets(10,10,10,10);  //top padding
+    pane.add(button2, c);
+    
+    JButton button3 = new JButton("Webservice");
+    c.fill = GridBagConstraints.VERTICAL;
+    c.weighty = 0;
+    c.weightx = 0.5;
+    c.gridx = 3;
+    c.ipadx=120;
+    c.gridy = 2;
+    c.insets = new Insets(10,10,10,10);  //top padding
+    pane.add(button3, c);
+    
+    JButton button4 = new JButton("Security");
+    c.fill = GridBagConstraints.VERTICAL;
+    c.weighty = 0;
+    c.ipadx=120;
+    c.weightx = 0.5;
+    c.gridx = 1;
+    c.gridy = 3;
+    c.insets = new Insets(10,10,10,10);  //top padding
+    pane.add(button4, c);
+    
+    JButton button5 = new JButton("Load");
+    c.fill = GridBagConstraints.VERTICAL;
+    c.weighty = 0;
+    c.ipadx=120;
+    c.weightx = 0.5;
+    c.gridwidth = 10;
+    c.gridx = 3;
+    c.gridy = 3;
+    c.insets = new Insets(10,10,10,10);  //top padding
+    pane.add(button5, c);
+ 
+    JButton button6 = new JButton("Exit");
+    c.fill = GridBagConstraints.HORIZONTAL;
+    c.ipady = 0;       //reset to default
+    c.weighty = 1.0;   //request any extra vertical space
+    c.anchor = GridBagConstraints.PAGE_END; //bottom of space
+    c.insets = new Insets(10,10,10,10);  //top padding
+    c.gridx = 3;       //aligned with button 2
+    c.gridwidth = 2;   //2 columns wide
+    c.gridy = 5;       //third row
+    pane.add(button6, c);
+    
+	button.addActionListener
+	(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				frame.dispose();
+				frame.setVisible(false);
 
-@SuppressWarnings("serial")
-public class MainLanding extends JPanel 
-{
-	public void createAndShowGUIMainLanding() 
-	{
-		JMenuBar menuBar;
-		JMenu menu = null;
-		JMenuItem menuItem;
-		final JFrame frame = new JFrame("Web2Go");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+				WebAppTest object = new WebAppTest();
+				object.createAndShowGUIWebAppTest();
+			}
+		}
+	);      
+	
+	button6.addActionListener
+	(new ActionListener() 
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				System.exit(0);			
+			}
+		}
+	); 
+    }
+ 
+    /**
+     * Create the GUI and show it.  For thread safety,
+     * this method should be invoked from the
+     * event-dispatching thread.
+     */
+    static void createAndShowGUIMainLanding() {
+        //Create and set up the window.
+    	frame = new JFrame("Web2Go");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension d = new Dimension(400,400);
 		frame.setPreferredSize(d);
-		MainLanding newContentPane = new MainLanding();
-		newContentPane.setOpaque(true);
-		frame.setContentPane(newContentPane);
-
-		//Display the window.
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		frame.setResizable(false);
-		frame.setLayout(null);
-    
-		menuBar = new JMenuBar();
-		menu = new JMenu("About");
-		menuItem = new JMenuItem("About Product");
+        //Set up the content pane.
+        addComponentsToPane(frame.getContentPane());
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("About");
+		JMenuItem menuItem = new JMenuItem("About Product");
 		menu.add(menuItem);
 		menuBar.add(menu);
 		menuBar.setBackground(Color.GRAY);
 		menu.setForeground(Color.WHITE);
 		frame.setJMenuBar(menuBar);
-    
-		JButton web = new JButton("Web Application");
-		JButton desktop = new JButton("Desktop Application");
-		JButton mobile = new JButton("Mobile Application");
-		JButton ws = new JButton("Webservice");
-		JButton security = new JButton("Security");
-		JButton load = new JButton("Load");
-		JButton exit = new JButton("Exit");
-
-        //ImageIcon img = new ImageIcon("C:\\Users\\shobhit.gupta\\Desktop\\images.jpg");
-        //web.setIcon(img);
-		web.setBounds(30, 40, 150, 30);
-		desktop.setBounds(210, 40, 150, 30);
-		mobile.setBounds(30, 100, 150, 30);
-		ws.setBounds(210, 100, 150, 30);
-		security.setBounds(30, 160, 150, 30);
-		load.setBounds(210, 160, 150, 30);
-		exit.setBounds(280, 300, 100, 30);
 		
-		frame.add(web);
-		frame.add(desktop);
-		frame.add(mobile);
-		frame.add(ws);
-		frame.add(security);
-		frame.add(load);
-		frame.add(exit);
-		
-		menuItem.addActionListener
+	    menuItem.addActionListener
 		(new ActionListener() 
 			{
 				@Override
@@ -81,32 +168,24 @@ public class MainLanding extends JPanel
 					object.createAndShowGUIAbout();
 				}
 			}
-		);     
-    
-    
-		web.addActionListener
-		(new ActionListener() 
-			{
-				@Override
-				public void actionPerformed(ActionEvent e) 
-				{
-					frame.setVisible(false);
-					WebAppTest object = new WebAppTest();
-					object.createAndShowGUIWebAppTest();
-				}
-			}
-		);      
+		); 
+ 
+        //Display the window.
+	    frame.setResizable(false);
+        frame.pack();
+        frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 		
-		exit.addActionListener
-		(new ActionListener() 
-			{
-				@Override
-				public void actionPerformed(ActionEvent e) 
-				{
-					System.exit(0);			
-				}
-			}
-		);  
-		
-	}
+    }
+ 
+    public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+
+            	createAndShowGUIMainLanding();
+            }
+        });
+    }
 }

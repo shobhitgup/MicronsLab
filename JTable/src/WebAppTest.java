@@ -180,13 +180,16 @@ public class WebAppTest extends JPanel
 		back.addActionListener
 		(new ActionListener() 
 			{
+				@SuppressWarnings("static-access")
 				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
-					
 					MainLanding object = new MainLanding();
 					object.createAndShowGUIMainLanding();
+					frame1.dispose();
 					frame1.setVisible(false);
+
+
 				}
 			}
 		);  

@@ -39,7 +39,7 @@ public class Login {
         panel.add(Login,"pos 150 200 0 0,width 150:250");
 
         
-        JFrame frame = new JFrame("MigLayoutTest");
+        JFrame frame = new JFrame("Login");
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500,500));
@@ -54,8 +54,6 @@ public class Login {
 				@Override
     			public void actionPerformed(ActionEvent e) 
     			{
-    				
-    				
     				if (UserNameInput.getText().toString().equals("Shobhit"))
     				{
     					MainLanding object = new MainLanding();

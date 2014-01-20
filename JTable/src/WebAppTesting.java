@@ -7,8 +7,8 @@ public class WebAppTesting
         	{
             	public void run() 
             	{
-            		MainLanding obj = new MainLanding();
-            		obj.createAndShowGUIMainLanding();
+            		Login obj = new Login();
+            		obj.createAndShowGUILogin();
             	}
         	}
         );

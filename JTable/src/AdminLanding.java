@@ -4,11 +4,15 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -26,20 +30,34 @@ public class AdminLanding {
         MigLayout layout = new MigLayout();
         JPanel panel = new JPanel(layout);
         
-        JLabel UserName = new JLabel("User Name");
-        JLabel Password = new JLabel("Password");
-        final JTextField UserNameInput = new JTextField();
-        JTextField PasswordInput = new JTextField();
-        final JButton Login = new JButton("Login");
+        JLabel UserList = new JLabel("Existing Users");
+        JLabel ProjectList = new JLabel("Existing Projects");
         
-        panel.add(UserName,"pos 150 100 0 0");
-        panel.add(UserNameInput,"pos 250 100 0 0,wrap, width 150:250");
-        panel.add(Password,"pos 150 130 0 0");
-        panel.add(PasswordInput,"pos 250 130 0 0,wrap, width 150:250");
-        panel.add(Login,"pos 150 200 0 0,width 150:250");
+        panel.add(UserList,"pos 150 50 0 0");
+        panel.add(ProjectList,"pos 250 50 0 0");
+        
+        DefaultListModel listModel = new DefaultListModel();
+        listModel.addElement("Jane Doe");
+        listModel.addElement("John Smith");
+        listModel.addElement("Kathy Green");
+        listModel.addElement("Shobhit");
+        JList list = new JList(listModel);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setSelectedIndex(0);
+        list.setVisibleRowCount(5);
+        panel.add(list,"pos 150 80 0 0");
 
+        DefaultListModel listModel1 = new DefaultListModel();
+        listModel1.addElement("Jane Doe");
+        listModel1.addElement("John Smith");
+        listModel1.addElement("Kathy Green");
+        JList list1 = new JList(listModel1);
+        list1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list1.setSelectedIndex(0);
+        list1.setVisibleRowCount(5);
+        panel.add(list1,"pos 250 80 0 0");
         
-        JFrame frame = new JFrame("Login");
+        JFrame frame = new JFrame("Adin Login");
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500,500));
@@ -47,21 +65,7 @@ public class AdminLanding {
         frame.add(panel, BorderLayout.CENTER);
         frame.setResizable(false);
         
-        Login.addActionListener
-    	(new ActionListener() 
-    		{
-    			@SuppressWarnings("static-access")
-				@Override
-    			public void actionPerformed(ActionEvent e) 
-    			{
-    				if (UserNameInput.getText().toString().equals("Shobhit"))
-    				{
-    					MainLanding object = new MainLanding();
-    					object.createAndShowGUIMainLanding();
-    				}
-    			}
-    		}
-    	); 
+        
 
         frame.pack();
         frame.setVisible(true);

@@ -36,7 +36,7 @@ public class Login {
         panel.add(Login,"pos 150 200 0 0,width 150:250");
 
         
-        JFrame frame = new JFrame("Login");
+        final JFrame frame = new JFrame("Login");
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500,500));
@@ -53,8 +53,9 @@ public class Login {
     			{
     				if (UserNameInput.getText().toString().equals("Shobhit"))
     				{
-    					MainLanding object = new MainLanding();
-    					object.createAndShowGUIMainLanding();
+    					frame.setVisible(false);
+    					AdminLanding object = new AdminLanding();
+    					object.createAndShowGUIAdminLogin();
     				}
     			}
     		}

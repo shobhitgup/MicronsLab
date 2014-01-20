@@ -127,10 +127,13 @@ public class MainLanding {
 	button6.addActionListener
 	(new ActionListener() 
 		{
+			@SuppressWarnings("static-access")
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				System.exit(0);			
+				frame.setVisible(false);
+				Login object = new 	Login();
+				object.createAndShowGUILogin();
 			}
 		}
 	); 

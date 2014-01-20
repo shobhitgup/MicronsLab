@@ -57,6 +57,12 @@ public class Login {
     					AdminLanding object = new AdminLanding();
     					object.createAndShowGUIAdminLogin();
     				}
+    				else
+    				{
+    					frame.setVisible(false);
+    					MainLanding object = new MainLanding();
+    					object.createAndShowGUIMainLanding();
+    				}
     			}
     		}
     	); 

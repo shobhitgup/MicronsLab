@@ -32,7 +32,6 @@ public class AdminLanding {
         
         JLabel UserList = new JLabel("Existing Users");
         JLabel ProjectList = new JLabel("Existing Projects");
-        
         panel.add(UserList,"pos 150 50 0 0");
         panel.add(ProjectList,"pos 250 50 0 0");
         
@@ -57,19 +56,16 @@ public class AdminLanding {
         list1.setVisibleRowCount(5);
         panel.add(list1,"pos 250 80 0 0");
         
-        JFrame frame = new JFrame("Adin Login");
+        JFrame frame = new JFrame("Admin Login");
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500,500));
         frame.setLayout(new BorderLayout());
         frame.add(panel, BorderLayout.CENTER);
         frame.setResizable(false);
-        
-        
 
         frame.pack();
         frame.setVisible(true);
         frame.setLocationRelativeTo(null);
     }
-
 }

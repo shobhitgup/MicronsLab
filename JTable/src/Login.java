@@ -1,10 +1,8 @@
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -13,7 +11,6 @@ import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 
 public class Login {
-
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {

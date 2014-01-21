@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
  
 @SuppressWarnings("serial")
@@ -17,9 +18,25 @@ public class AdminLanding extends JPanel
     private JButton addButton1;
     private JButton deleteButton;
     private JButton deleteButton1;
+    private JButton deleteButton2;
     private JTextField nameFieldUser;
     private JTextField nameFieldProject;
- 
+    JComboBox c = new JComboBox();
+    JComboBox c1 = new JComboBox();
+    JLabel User;
+    JLabel Project;
+    JLabel UPM;
+    JLabel SP;
+    JLabel SU;
+    String[] columnNames = {"Project","User"};
+    Object[][] data = {{"Dummy Project", "Dummy User"}};
+    JTable table;
+    DefaultTableModel model ;
+    JPanel buttonPane;
+    JScrollPane scrollPane;
+    String selected = null;
+    String selected1 = null;
+    
     public AdminLanding() {
         super(new  MigLayout());
  
@@ -72,6 +89,14 @@ public class AdminLanding extends JPanel
         deleteButton1 = new JButton(deleteString);
         deleteButton1.setActionCommand(deleteString);
         deleteButton1.addActionListener(new DeleteButtonListener1());
+        
+        deleteButton2 = new JButton(deleteString);
+        deleteButton2.setActionCommand(deleteString);
+        deleteButton2.addActionListener(new DeleteButtonListener2());
+        
+        JButton b = new JButton("Add User To Project");
+        b.setActionCommand(addString);
+        b.addActionListener(new AddButtonListener2());
 
         
         //Create the text field for entering new user names.
@@ -91,9 +116,8 @@ public class AdminLanding extends JPanel
         //Create a control panel, using the default FlowLayout.
         
         MigLayout layout = new MigLayout();
-        JPanel buttonPane = new JPanel(layout);
-        JLabel User;
-        JLabel Project;
+        buttonPane = new JPanel(layout);
+
 		buttonPane.add(User = new JLabel("User"),"Pos 100 20 0 0");
 		buttonPane.add(Project = new JLabel("Project"),"Pos 300 20 0 0");
         buttonPane.add(listScrollPaneUser,"Pos 100 40 0 0, width 150!, height 90!");
@@ -104,7 +128,29 @@ public class AdminLanding extends JPanel
         buttonPane.add(nameFieldProject,"Pos 300 140 0 0, width 150!");
         buttonPane.add(deleteButton,"Pos 170 160 0 0, width 70!, height 20!");
         buttonPane.add(deleteButton1,"Pos 370 160 0 0, width 70!, height 20!");
- 
+        buttonPane.add(UPM = new JLabel("User Project Mapping"),"Pos 100 220 0 0");
+        buttonPane.add(SU = new JLabel("Select Project"),"Pos 100 250 0 0");
+        buttonPane.add(SP = new JLabel("Select User"),"Pos 300 250 0 0");
+        buttonPane.add(c ,"Pos 100 267 0 0, width 150!");
+        c.addItem("Dummy Project");
+        c.addItem("Rabo");
+        c.setSelectedIndex(-1);
+        buttonPane.add(c1 ,"Pos 300 267 0 0, width 150!");
+        c1.addItem("Dummy User");
+        c1.addItem("Shobhit");
+        c1.setSelectedIndex(-1);
+        buttonPane.add(b ,"Pos 250 222 0, width 150!, height 15!");
+        
+        model = new DefaultTableModel(data, columnNames);
+        table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        table.setFillsViewportHeight(true);
+        scrollPane = new JScrollPane(table);
+        buttonPane.add(scrollPane ,"Pos 150 300 0, width 250!, height 50!");
+        
+        buttonPane.add(deleteButton2 ,"Pos 400 222 0, width 100!, height 15!");
+
+        
         add(buttonPane);
     }
  
@@ -143,6 +189,21 @@ public class AdminLanding extends JPanel
                 }
                 listProject.setSelectedIndex(firstSelected1);
             }
+        }
+    }
+
+    class DeleteButtonListener2 implements ActionListener {
+        public void actionPerformed(ActionEvent b) {
+        	int selRow = table.getSelectedRow();
+        	model.removeRow(selRow);
+        	if (table.getRowCount() == 0)
+        	{
+        		deleteButton2.setEnabled(false);
+        	} else
+        	{
+        		deleteButton2.setEnabled(true);
+        	}
+        		
         }
     }
 
@@ -192,6 +253,18 @@ public class AdminLanding extends JPanel
             }
         }
     }
+    
+    class AddButtonListener2 implements ActionListener {
+        public void actionPerformed(ActionEvent d) {
+            selected = c.getSelectedItem().toString();
+            selected1 = c1.getSelectedItem().toString();
+            model.insertRow(table.getRowCount(), new Object[]{selected.toString(),selected1.toString()});
+            if (table.getRowCount() != 0)
+            {
+            	deleteButton2.setEnabled(true);
+            }
+        }
+    }
  
     //Listener method for list selection changes.
     public void valueChanged(ListSelectionEvent e) {
@@ -213,8 +286,6 @@ public class AdminLanding extends JPanel
             }
         }
         
-
-        
         if (listProject.getSelectedIndex() == -1) {
             //No selection: disable delete, up, and down buttons.
                 deleteButton1.setEnabled(false);
@@ -229,7 +300,6 @@ public class AdminLanding extends JPanel
                 deleteButton1.setEnabled(true);
                 nameFieldProject.setText(listProject.getSelectedValue().toString());
             }
-    
     }
  
     /** 
@@ -239,9 +309,9 @@ public class AdminLanding extends JPanel
      */
     static void createAndShowGUIAdminLogin() {
         //Create and set up the window.
-        JFrame frame = new JFrame("ListDataEventDemo");
+        JFrame frame = new JFrame("Admin Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(500,500));
+        frame.setPreferredSize(new Dimension(600,500));
         //Create and set up the content pane.
         JComponent newContentPane = new AdminLanding();
         newContentPane.setOpaque(true); //content panes must be opaque

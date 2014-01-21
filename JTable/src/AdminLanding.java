@@ -108,7 +108,7 @@ public class AdminLanding extends JPanel
         MigLayout layout = new MigLayout();
         buttonPane = new JPanel(layout);
 
-		buttonPane.add(User = new JLabel("User"),"Pos 100 20 0 0");
+		buttonPane.add(User = new JLabel("User, Password"),"Pos 100 20 0 0");
 		buttonPane.add(Project = new JLabel("Project"),"Pos 300 20 0 0");
         buttonPane.add(listScrollPaneUser,"Pos 100 40 0 0, width 150!, height 90!");
         buttonPane.add(listScrollPanelProject,"Pos 300 40 0 0, width 150!, height 90!");

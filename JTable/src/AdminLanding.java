@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,34 +10,22 @@ import net.miginfocom.swing.MigLayout;
 @SuppressWarnings("serial")
 public class AdminLanding extends JPanel 
                                implements ListSelectionListener {
-    private JList listUser;
-    private JList listProject;
-    private DefaultListModel listModelUser;
-    private DefaultListModel listModelProject;
+    private JList listUser, listProject;
+    private DefaultListModel listModelUser, listModelProject;
     private static final String addString = "Add";
     private static final String deleteString = "Delete";
-    private JButton addButton;
-    private JButton addButton1;
-    private JButton deleteButton;
-    private JButton deleteButton1;
-    private JButton deleteButton2;
-    private JTextField nameFieldUser;
-    private JTextField nameFieldProject;
+    private JButton addButton,addButton1, deleteButton, deleteButton1, deleteButton2;
+    private JTextField nameFieldUser, nameFieldProject;
     JComboBox c = new JComboBox();
     JComboBox c1 = new JComboBox();
-    JLabel User;
-    JLabel Project;
-    JLabel UPM;
-    JLabel SP;
-    JLabel SU;
+    JLabel User, Project, UPM, SP, SU;
     String[] columnNames = {"Project","User"};
     Object[][] data = {{"Dummy Project", "Dummy User"}};
     JTable table;
     DefaultTableModel model ;
     JPanel buttonPane;
     JScrollPane scrollPane;
-    String selected = null;
-    String selected1 = null;
+    String selected, selected1 = null;
     
     public AdminLanding() {
         super(new  MigLayout());
@@ -126,11 +116,12 @@ public class AdminLanding extends JPanel
         buttonPane.add(addButton1,"Pos 300 160 0 0, width 70!, height 20!");
         buttonPane.add(nameFieldUser,"Pos 100 140 0 0, width 150!");
         buttonPane.add(nameFieldProject,"Pos 300 140 0 0, width 150!");
-        buttonPane.add(deleteButton,"Pos 170 160 0 0, width 70!, height 20!");
-        buttonPane.add(deleteButton1,"Pos 370 160 0 0, width 70!, height 20!");
-        buttonPane.add(UPM = new JLabel("User Project Mapping"),"Pos 100 220 0 0");
+        buttonPane.add(deleteButton,"Pos 180 160 0 0, width 70!, height 20!");
+        buttonPane.add(deleteButton1,"Pos 380 160 0 0, width 70!, height 20!");
+        buttonPane.add(UPM = new JLabel("User Project Mapping"),"Pos 70 220 0 0");
         buttonPane.add(SU = new JLabel("Select Project"),"Pos 100 250 0 0");
         buttonPane.add(SP = new JLabel("Select User"),"Pos 300 250 0 0");
+        buttonPane.add(deleteButton2 ,"Pos 380 222 0, width 100!, height 15!");
         buttonPane.add(c ,"Pos 100 267 0 0, width 150!");
         c.addItem("Dummy Project");
         c.addItem("Rabo");
@@ -139,17 +130,14 @@ public class AdminLanding extends JPanel
         c1.addItem("Dummy User");
         c1.addItem("Shobhit");
         c1.setSelectedIndex(-1);
-        buttonPane.add(b ,"Pos 250 222 0, width 150!, height 15!");
+        buttonPane.add(b ,"Pos 210 222 0 0, width 150!, height 15!");
         
-        model = new DefaultTableModel(data, columnNames);
+        model = new DefaultTableModel(null, columnNames);
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
         scrollPane = new JScrollPane(table);
-        buttonPane.add(scrollPane ,"Pos 150 300 0, width 250!, height 50!");
-        
-        buttonPane.add(deleteButton2 ,"Pos 400 222 0, width 100!, height 15!");
-
+        buttonPane.add(scrollPane ,"Pos 150 300 0, width 250!, height 70!");
         
         add(buttonPane);
     }
@@ -195,7 +183,13 @@ public class AdminLanding extends JPanel
     class DeleteButtonListener2 implements ActionListener {
         public void actionPerformed(ActionEvent b) {
         	int selRow = table.getSelectedRow();
+        	try {
         	model.removeRow(selRow);
+        	} 
+        	catch (ArrayIndexOutOfBoundsException e ) {
+            	Toolkit.getDefaultToolkit().beep();
+                return;
+            }
         	if (table.getRowCount() == 0)
         	{
         		deleteButton2.setEnabled(false);
@@ -222,14 +216,17 @@ public class AdminLanding extends JPanel
 
             //If no selection or if item in last position is selected,
             //add the new one to end of list, and select new one.
+            if (listModelUser.indexOf(nameFieldUser.getText()) == -1){
             if (index2 == -1 || (index2+1 == size2)) {
+            		System.out.println(listModelUser.indexOf(nameFieldUser.getText()));
             	listModelUser.addElement(nameFieldUser.getText());
                 listUser.setSelectedIndex(size2);} else {
             	listModelUser.insertElementAt(nameFieldUser.getText(), index2+1);
                 listUser.setSelectedIndex(index2+1);
-            }
-        }
-    }
+
+        }} else {Toolkit.getDefaultToolkit().beep();
+        return;}
+    }}
  
     class AddButtonListener1 implements ActionListener {
         public void actionPerformed(ActionEvent d) {
@@ -245,24 +242,51 @@ public class AdminLanding extends JPanel
  
             //If no selection or if item in last position is selected,
             //add the new one to end of list, and select new one.
+            if (listModelProject.indexOf(nameFieldProject.getText()) == -1){
             if (index3 == -1 || (index3+1 == size3)) {
             	listModelProject.addElement(nameFieldProject.getText());
                 listProject.setSelectedIndex(size3);} else {
                 listModelProject.insertElementAt(nameFieldProject.getText(), index3+1);
                 listProject.setSelectedIndex(index3+1);
-            }
-        }
+            }} else {Toolkit.getDefaultToolkit().beep();
+            return;}
+        } 
     }
     
     class AddButtonListener2 implements ActionListener {
         public void actionPerformed(ActionEvent d) {
-            selected = c.getSelectedItem().toString();
-            selected1 = c1.getSelectedItem().toString();
+            try {selected = c.getSelectedItem().toString();
+            selected1 = c1.getSelectedItem().toString();}
+            catch (NullPointerException e ) {
+            	Toolkit.getDefaultToolkit().beep();
+                return;
+            }
+            
+            ArrayList<String> data = new ArrayList<String>();
+
+                for (int i = model.getRowCount() - 1; i >= 0; --i) {
+                    for (int j = model.getColumnCount() - 1; j >= 0; --j) {
+                        System.out.println(model.getValueAt(i, j).toString() + model.getValueAt(i, j-1).toString());	
+                    	//data.add(model.getValueAt(i, j).toString());
+                    }
+                }
+                
+                for (int i = 0; i < model.getRowCount() - 1; i++) {
+                    for (int j = 0; j < model.getColumnCount() - 1; j++) {
+                        System.out.println(model.getValueAt(i, j).toString() + model.getValueAt(i, j-1).toString());	
+                    	//data.add(model.getValueAt(i, j).toString());
+                    }
+                }
+             
+
+            
             model.insertRow(table.getRowCount(), new Object[]{selected.toString(),selected1.toString()});
             if (table.getRowCount() != 0)
             {
             	deleteButton2.setEnabled(true);
             }
+            c1.setSelectedIndex(-1);
+            c.setSelectedIndex(-1);
         }
     }
  

@@ -5,7 +5,8 @@ public class WebAppTesting
         javax.swing.SwingUtilities.invokeLater
         (new Runnable() 
         	{
-            	public void run() 
+            	@SuppressWarnings("static-access")
+				public void run() 
             	{
             		Login obj = new Login();
             		obj.createAndShowGUILogin();

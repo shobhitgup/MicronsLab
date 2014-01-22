@@ -49,7 +49,7 @@ public class AdminLanding extends JPanel
         //Create and populate the project list model.
         listModelProject = new DefaultListModel();
         listModelProject.addElement("Dummy Project");
- 
+        //test
         //Create the project list and put it in a scroll pane.
         listProject = new JList(listModelProject);
         listProject.setSelectionMode(

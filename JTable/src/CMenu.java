@@ -4,7 +4,8 @@ import javax.swing.*;
 
 import net.miginfocom.swing.MigLayout;
        
-    public class CMenu {  
+    @SuppressWarnings("unused")
+	public class CMenu {  
         
 		private JPanel getContent() {  
             JPanel panel = new JPanel(new GridBagLayout());  
@@ -18,16 +19,26 @@ import net.miginfocom.swing.MigLayout;
         }  
        
         public static void main(String[] args) {  
-            JFrame f = new JFrame();  
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-            f.getContentPane().add(new CMenu().getContent());  
-            f.setSize(600,600);  
-            f.setLocation(200,200);  
+            JFrame f = new JFrame(); 
+            JButton button;
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+            splitPane.setOneTouchExpandable(true);
+            splitPane.setDividerLocation(400);
+            splitPane.setLeftComponent(f.getContentPane().add(new CMenu().getContent()));
+            splitPane.setRightComponent(button = new JButton("Right"));
+            f.getContentPane().add(splitPane);
+            
+            
+            f.setSize(1000,600);  
+            f.setLocation(200,100);  
             f.setVisible(true);  
         }  
     }  
        
-    class AccordianPanel extends JPanel {  
+    @SuppressWarnings("serial")
+	class AccordianPanel extends JPanel {  
         boolean movingComponents = false;  
         int visibleIndex = 3;  
        
@@ -143,7 +154,8 @@ import net.miginfocom.swing.MigLayout;
         }  
     }  
        
-    class ChildPanel extends JPanel {  
+    @SuppressWarnings("serial")
+	class ChildPanel extends JPanel {  
         public ChildPanel(int id, MouseListener ml) {  
             setLayout(new BorderLayout());  
             add(new ControlPanel(id, ml), "First");  
@@ -165,7 +177,8 @@ import net.miginfocom.swing.MigLayout;
         }  
     }  
        
-    class ControlPanel extends JPanel {  
+    @SuppressWarnings("serial")
+	class ControlPanel extends JPanel {  
         int id;  
         JLabel titleLabel;  
         Color c1 = new Color(200,180,180);  
@@ -176,16 +189,11 @@ import net.miginfocom.swing.MigLayout;
        
         public ControlPanel(int id, MouseListener ml) {  
             this.id = id;  
-            //System.out.println("ID :" + id);
             setLayout(new BorderLayout());  
-            
-            //add(titleLabel = new JLabel("PanelSho " + id, JLabel.CENTER));  
-            
             if (id == 1) add(titleLabel = new JLabel("Test Management", JLabel.CENTER));
             if (id == 2) add(titleLabel = new JLabel("Execute", JLabel.CENTER)); 
             if (id == 3) add(titleLabel = new JLabel("Requirements", JLabel.CENTER));
             if (id == 4) add(titleLabel = new JLabel("Reports", JLabel.CENTER)); 
-            	
             titleLabel.setForeground(fontFg);  
             Dimension d = getPreferredSize();  
             d.height = HEIGHT;  

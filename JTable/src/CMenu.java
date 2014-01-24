@@ -1,6 +1,8 @@
 import java.awt.*;  
 import java.awt.event.*;  
 import javax.swing.*;  
+
+import net.miginfocom.swing.MigLayout;
        
     public class CMenu {  
         private JPanel getContent() {  
@@ -11,12 +13,21 @@ import javax.swing.*;
         }  
        
         public static void main(String[] args) {  
-            JFrame f = new JFrame();  
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-            f.getContentPane().add(new CMenu().getContent());  
-            f.setSize(400,400);  
-            f.setLocation(200,200);  
-            f.setVisible(true);  
+            //JFrame f = new JFrame();  
+            //  
+            
+            JFrame vFrame = new JFrame("Horizontal Split");
+            vFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JComponent leftButton = new JButton();
+            JComponent rightButton = new JButton("Right");
+            final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+            splitPane.setOneTouchExpandable(true);
+            splitPane.setLeftComponent(vFrame.getContentPane().add(new CMenu().getContent()));
+            splitPane.setRightComponent(rightButton);
+            splitPane.setDividerLocation(350);
+            vFrame.getContentPane().add(splitPane, BorderLayout.CENTER);
+            vFrame.setSize(1000, 700);
+            vFrame.setVisible(true); 
         }  
     }  
        
@@ -144,20 +155,12 @@ import javax.swing.*;
         }  
        
         private JPanel getContent(int id) {  
-            JPanel panel = new JPanel(new GridBagLayout());
+            JPanel panel = new JPanel();
             System.out.println("ID :" + id);
-            GridBagConstraints gbc = new GridBagConstraints();  
-            gbc.insets = new Insets(2,2,2,2);  
-            gbc.weightx = 1.0;  
-            gbc.weighty = 1.0;  
-            gbc.anchor = gbc.NORTHWEST;  
-            
-            if (id == 1) panel.add(new JLabel("Suite A"), gbc);  
-            if (id == 2) panel.add(new JLabel("Confitugation"), gbc);
-            if (id == 3) panel.add(new JLabel("Req 1"), gbc);
-            if (id == 4) panel.add(new JLabel("Report 1"), gbc);
-            
-            //panel.add(new JLabel("Panel " + id + " Content"), gbc);  
+            if (id == 1) panel.add(new JLabel("Suite A"));  
+            if (id == 2) panel.add(new JLabel("Confitugation"));
+            if (id == 3) panel.add(new JLabel("Req 1"));
+            if (id == 4) panel.add(new JLabel("Report 1"));
             return panel;  
         }  
        

@@ -5,29 +5,25 @@ import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
        
     public class CMenu {  
-        private JPanel getContent() {  
+        
+		private JPanel getContent() {  
             JPanel panel = new JPanel(new GridBagLayout());  
             GridBagConstraints gbc = new GridBagConstraints();  
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
             panel.add(new AccordianPanel().getPanel(), gbc);  
+            
             return panel;  
         }  
        
         public static void main(String[] args) {  
-            //JFrame f = new JFrame();  
-            //  
-            
-            JFrame vFrame = new JFrame("Horizontal Split");
-            vFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JComponent leftButton = new JButton();
-            JComponent rightButton = new JButton("Right");
-            final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-            splitPane.setOneTouchExpandable(true);
-            splitPane.setLeftComponent(vFrame.getContentPane().add(new CMenu().getContent()));
-            splitPane.setRightComponent(rightButton);
-            splitPane.setDividerLocation(350);
-            vFrame.getContentPane().add(splitPane, BorderLayout.CENTER);
-            vFrame.setSize(1000, 700);
-            vFrame.setVisible(true); 
+            JFrame f = new JFrame();  
+            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+            f.getContentPane().add(new CMenu().getContent());  
+            f.setSize(600,600);  
+            f.setLocation(200,200);  
+            f.setVisible(true);  
         }  
     }  
        

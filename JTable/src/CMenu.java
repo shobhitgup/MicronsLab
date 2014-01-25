@@ -1,223 +1,108 @@
-import java.awt.*;  
-import java.awt.event.*;  
-import javax.swing.*;  
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
+import javax.swing.Icon;
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
-import net.miginfocom.swing.MigLayout;
-       
-    @SuppressWarnings("unused")
-	public class CMenu {  
-        
-		private JPanel getContent() {  
-            JPanel panel = new JPanel(new GridBagLayout());  
-            GridBagConstraints gbc = new GridBagConstraints();  
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            panel.add(new AccordianPanel().getPanel(), gbc);  
-            
-            return panel;  
-        }  
-       
-        public static void main(String[] args) {  
-            JFrame f = new JFrame(); 
-            JButton button;
-            f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-            splitPane.setOneTouchExpandable(true);
-            splitPane.setDividerLocation(400);
-            splitPane.setLeftComponent(f.getContentPane().add(new CMenu().getContent()));
-            splitPane.setRightComponent(button = new JButton("Right"));
-            f.getContentPane().add(splitPane);
-            
-            
-            f.setSize(1000,600);  
-            f.setLocation(200,100);  
-            f.setVisible(true);  
-        }  
-    }  
-       
-    @SuppressWarnings("serial")
-	class AccordianPanel extends JPanel {  
-        boolean movingComponents = false;  
-        int visibleIndex = 3;  
-       
-        public AccordianPanel() {  
-            setLayout(null);  
-            // Add children and compute prefSize.  
-            int childCount = 4;  
-            Dimension d = new Dimension();  
-            int h = 0;  
-            for(int j = 0; j < childCount; j++) {  
-                ChildPanel child = new ChildPanel(j+1, ml);  
-                add(child);  
-                d = child.getPreferredSize();  
-                child.setBounds(0, h, d.width, d.height);  
-                if(j < childCount-1)  
-                    h += ControlPanel.HEIGHT;  
-            }  
-            h += d.height;  
-            setPreferredSize(new Dimension(d.width, h));  
-            // Set z-order for children.  
-            setZOrder();  
-        }  
-       
-        private void setZOrder() {  
-            Component[] c = getComponents();  
-            for(int j = 0; j < c.length-1; j++) {  
-                setComponentZOrder(c[j], c.length-1 - j);  
-            }  
-        }  
-       
-        private void setChildVisible(int indexToOpen) {  
-            // If visibleIndex < indexToOpen, components at  
-            // [visibleIndex+1 down to indexToOpen] move up.  
-            // If visibleIndex > indexToOpen, components at  
-            // [indexToOpen+1 up to visibleIndex] move down.  
-            // Collect indices of components that will move  
-            // and determine the distance/direction to move.  
-            int[] indices = new int[0];  
-            int travelLimit = 0;  
-            if(visibleIndex < indexToOpen) {  
-                travelLimit = ControlPanel.HEIGHT -  
-                                  getComponent(visibleIndex).getHeight();  
-                int n = indexToOpen - visibleIndex;  
-                indices = new int[n];  
-                for(int j = visibleIndex, k = 0; j < indexToOpen; j++, k++)  
-                    indices[k] = j + 1;  
-            } else if(visibleIndex > indexToOpen) {  
-                travelLimit = getComponent(visibleIndex).getHeight() -  
-                                  ControlPanel.HEIGHT;  
-                int n = visibleIndex - indexToOpen;  
-                indices = new int[n];  
-                for(int j = indexToOpen, k = 0; j < visibleIndex; j++, k++)  
-                    indices[k] = j + 1;  
-            }  
-            movePanels(indices, travelLimit);  
-            visibleIndex = indexToOpen;  
-        }  
-       
-        private void movePanels(final int[] indices, final int travel) {  
-            movingComponents = true;  
-            Thread thread = new Thread(new Runnable() {  
-                public void run() {  
-                    Component[] c = getComponents();  
-                    int limit = travel > 0 ? travel : 0;  
-                    int count = travel > 0 ? 0 : travel;  
-                    int dy    = travel > 0 ? 8 : -8;  
-                    System.out.println("-----travel="+travel);
-                    System.out.println("--count---="+count);
-                    System.out.println("-limit-"+limit);
-                    
-                    while(count < limit) {  
-                        try {  
-                            Thread.sleep(25);  
-                        } catch(InterruptedException e) {  
-                            System.out.println("interrupted");  
-                            break;  
-                        }  
-                        for(int j = 0; j < indices.length; j++) {  
-                            
-                            // The z-order reversed the order returned  
-                            // by getComponents. Adjust the indices to  
-                            // get the correct components to relocate.  
-                            int index = c.length-1 - indices[j];  
-                            Point p = c[index].getLocation();  
-                            p.y += dy;  
-                            c[index].setLocation(p.x, p.y);  
-                            System.out.println("x="+p.x+"y="+p.y);
-                        }  
-                        repaint();  
-                        count=count+8;  
-                    }  
-                    movingComponents = false;  
-                }  
-            });  
-            thread.setPriority(Thread.NORM_PRIORITY);  
-            thread.start();  
-        }  
-       
-        private MouseListener ml = new MouseAdapter() {  
-            public void mousePressed(MouseEvent e) {  
-                int index = ((ControlPanel)e.getSource()).id-1;  
-                if(!movingComponents)  
-                    setChildVisible(index);  
-            }  
-        };  
-       
-        public JPanel getPanel() {  
-            JPanel panel = new JPanel(new GridBagLayout());  
-            GridBagConstraints gbc = new GridBagConstraints();  
-            panel.setBorder(BorderFactory.createLineBorder(Color.black, 1));  
-            panel.add(this, gbc);  
-            return panel;  
-        }  
-    }  
-       
-    @SuppressWarnings("serial")
-	class ChildPanel extends JPanel {  
-        public ChildPanel(int id, MouseListener ml) {  
-            setLayout(new BorderLayout());  
-            add(new ControlPanel(id, ml), "First");  
-            add(getContent(id));  
-        }  
-       
-        private JPanel getContent(int id) {  
-            JPanel panel = new JPanel();
-            System.out.println("ID :" + id);
-            if (id == 1) panel.add(new JLabel("Suite A"));  
-            if (id == 2) panel.add(new JLabel("Confitugation"));
-            if (id == 3) panel.add(new JLabel("Req 1"));
-            if (id == 4) panel.add(new JLabel("Report 1"));
-            return panel;  
-        }  
-       
-        public Dimension getPreferredSize() {  
-            return new Dimension(300,150);  
-        }  
-    }  
-       
-    @SuppressWarnings("serial")
-	class ControlPanel extends JPanel {  
-        int id;  
-        JLabel titleLabel;  
-        Color c1 = new Color(200,180,180);  
-        Color c2 = new Color(200,220,220);  
-        Color fontFg = Color.blue;  
-        Color rolloverFg = Color.red;  
-        public final static int HEIGHT = 45;  
-       
-        public ControlPanel(int id, MouseListener ml) {  
-            this.id = id;  
-            setLayout(new BorderLayout());  
-            if (id == 1) add(titleLabel = new JLabel("Test Management", JLabel.CENTER));
-            if (id == 2) add(titleLabel = new JLabel("Execute", JLabel.CENTER)); 
-            if (id == 3) add(titleLabel = new JLabel("Requirements", JLabel.CENTER));
-            if (id == 4) add(titleLabel = new JLabel("Reports", JLabel.CENTER)); 
-            titleLabel.setForeground(fontFg);  
-            Dimension d = getPreferredSize();  
-            d.height = HEIGHT;  
-            setPreferredSize(d);  
-            addMouseListener(ml);  
-            addMouseListener(listener);  
-        }  
-       
-        protected void paintComponent(Graphics g) {  
-            int w = getWidth();  
-            Graphics2D g2 = (Graphics2D)g;  
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,  
-                                RenderingHints.VALUE_ANTIALIAS_ON);  
-            g2.setPaint(new GradientPaint(w/2, 0, c1, w/2, HEIGHT/2, c2));  
-            g2.fillRect(0,0,w,HEIGHT);  
-        }  
-       
-        private MouseListener listener = new MouseAdapter() {  
-            public void mouseEntered(MouseEvent e) {  
-                titleLabel.setForeground(rolloverFg);  
-            }  
-       
-            public void mouseExited(MouseEvent e) {  
-                titleLabel.setForeground(fontFg);  
-            }  
-        };  
-    }   
+public class CMenu extends JFrame 
+{
+	public class VerticalTextIcon implements Icon, SwingConstants{ 
+	    private Font font = UIManager.getFont("Label.font"); 
+	    private FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font); 
+	 
+	    private String text; 
+	    private int width, height; 
+	    private boolean clockwize; 
+	 
+	    public VerticalTextIcon(String text, boolean clockwize){ 
+	        this.text = text; 
+	        width = SwingUtilities.computeStringWidth(fm, text); 
+	        height = fm.getHeight(); 
+	        this.clockwize = clockwize; 
+	    } 
+	 
+	    public void paintIcon(Component c, Graphics g, int x, int y){ 
+	        Graphics2D g2 = (Graphics2D)g; 
+	        Font oldFont = g.getFont(); 
+	        Color oldColor = g.getColor(); 
+	        AffineTransform oldTransform = g2.getTransform(); 
+	 
+	        g.setFont(font); 
+	        g.setColor(Color.black); 
+	        if(clockwize){ 
+	            g2.translate(x+getIconWidth(), y); 
+	            g2.rotate(Math.PI/2); 
+	        }else{ 
+	            g2.translate(x, y+getIconHeight()); 
+	            g2.rotate(-Math.PI/2); 
+	        } 
+	        g.drawString(text, 0, fm.getLeading()+fm.getAscent()); 
+	 
+	        g.setFont(oldFont); 
+	        g.setColor(oldColor); 
+	        g2.setTransform(oldTransform); 
+	    } 
+	 
+	    public int getIconWidth(){ 
+	        return height; 
+	    } 
+	 
+	    public int getIconHeight(){ 
+	        return width; 
+	    } 
+	    
+	    public void addTab(JTabbedPane tabPane, String text, Component comp){ 
+	        int tabPlacement = tabPane.getTabPlacement(); 
+	        switch(tabPlacement){ 
+	            case JTabbedPane.LEFT: 
+	            case JTabbedPane.RIGHT: 
+	                tabPane.addTab(null, new VerticalTextIcon(text, tabPlacement==JTabbedPane.RIGHT), comp); 
+	                return; 
+	            default: 
+	                tabPane.addTab(text, null, comp); 
+	        } 
+	    } 
+	    
+	    public JTabbedPane createTabbedPane(int tabPlacement){ 
+	        switch(tabPlacement){ 
+	            case JTabbedPane.LEFT: 
+	            case JTabbedPane.RIGHT: 
+	                Object textIconGap = UIManager.get("TabbedPane.textIconGap"); 
+	                Insets tabInsets = UIManager.getInsets("TabbedPane.tabInsets"); 
+	                UIManager.put("TabbedPane.textIconGap", new Integer(1)); 
+	                UIManager.put("TabbedPane.tabInsets", new Insets(tabInsets.left, tabInsets.top, tabInsets.right, tabInsets.bottom)); 
+	                JTabbedPane tabPane = new JTabbedPane(tabPlacement); 
+	                UIManager.put("TabbedPane.textIconGap", textIconGap); 
+	                UIManager.put("TabbedPane.tabInsets", tabInsets); 
+	                return tabPane; 
+	            default: 
+	                return new JTabbedPane(tabPlacement); 
+	        } 
+	    } 
+	}
+	
+	public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+            	CMenu obj1 = new CMenu();
+            	
+            	
+            	
+            }
+        });
+    }
+	
+	
+}

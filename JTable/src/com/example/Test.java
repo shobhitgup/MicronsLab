@@ -29,6 +29,7 @@ import javax.swing.JScrollBar;
 
 public class Test implements SwingConstants {
 	private JTable table;
+	int height;
 	public static void main(String[] args) {
 		new Test();
 	}
@@ -73,7 +74,7 @@ public class Test implements SwingConstants {
         JScrollPane scrollPane = new JScrollPane(table);
         rightComponent.add(scrollPane ,"cell 0 0,grow");
         
-		JTree tree = new JTree();
+		final JTree tree = new JTree();
 		tree.setLayout(new MigLayout());
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Object Repository") {
@@ -88,12 +89,24 @@ public class Test implements SwingConstants {
 					node_1 = new DefaultMutableTreeNode("Repository 3");
 						node_1.add(new DefaultMutableTreeNode("Third Page"));
 					add(node_1);
+					node_1 = new DefaultMutableTreeNode("Repository 4");
+					node_1.add(new DefaultMutableTreeNode("Fourth Page"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("Repository 5");
+					node_1.add(new DefaultMutableTreeNode("Fifth Page"));
+					add(node_1);
+					height = tree.getBounds().height;
+					System.out.println(height);
 				}
 			}
 		));
 		tree.setForeground(SystemColor.inactiveCaptionBorder);
 		tree.setBackground(Color.WHITE);
-		leftComponent.add(tree, "flowx,Pos 20 50 10 10,grow, width 150!, height 200!");
+		
+		JScrollPane scrollTree = new JScrollPane(tree);
+		scrollTree.setViewportView(tree);
+
+		leftComponent.add(scrollTree, "flowx,Pos 20 50 10 10, width 150!,height 200!,grow");
 
 
 

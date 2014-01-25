@@ -8,15 +8,27 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JTree;
+import java.awt.SystemColor;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.Color;
+import javax.swing.JTable;
+import javax.swing.JScrollBar;
 
 public class Test implements SwingConstants {
+	private JTable table;
 	public static void main(String[] args) {
 		new Test();
 	}
@@ -33,36 +45,58 @@ public class Test implements SwingConstants {
 		panel.setLayout(new GridLayout(0,1));
 		JTabbedPane tp = new JTabbedPane(LEFT);
 		Icon graphicIcon = UIManager.getIcon("FileView.computerIcon");
-		VTextIcon textIcon = new VTextIcon(panel, "Test Management",  VTextIcon.ROTATE_LEFT);
+		VTextIcon textIcon = new VTextIcon(panel, "Object Repository",  VTextIcon.ROTATE_LEFT);
 		CompositeIcon icon = new CompositeIcon(graphicIcon, textIcon);
 
-		JPanel leftComponent = new JPanel(new MigLayout("", "[1]", "[0][][][][]"));
-		JPanel rightComponent = new JPanel(new MigLayout("", "[grow]", "[]"));
+		JPanel leftComponent = new JPanel(new MigLayout("width 200!", "[grow]", "[grow]"));
+		JPanel rightComponent = new JPanel(new MigLayout("", "[grow]", "[grow]"));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
-
-		JTextField textField = new JTextField();
-		rightComponent.add(textField, "cell 0 0,growx");
-		textField.setColumns(10);
-
-		leftComponent.add(new JButton("Button 1"), "cell 0 0");
-		JButton button = new JButton("Button 2");
-		leftComponent.add(button, "cell 0 1");
-		JButton button_1 = new JButton("Button 3");
-		leftComponent.add(button_1, "cell 0 2");
-		JButton button_2 = new JButton("Button 4");
-		leftComponent.add(button_2, "cell 0 3");
 		
-		JButton btnNewButton = new JButton("New button");
-		leftComponent.add(btnNewButton, "cell 0 4");
+		JToolBar toolBar = new JToolBar("Still draggable");
+		JButton button = new JButton("Add");
+		button.setBorderPainted(false);
+		JButton button1 = new JButton("Delete");
+		button1.setBorderPainted(false);
+		toolBar.add(button);
+		toolBar.add(button1);
+		
+		leftComponent.add(toolBar,"Pos 10 10 0 0,width 100!, height 20!");
+		
+		DefaultTableModel model ;
+		String[] columnNames = {"ObjectName","Object_Xpath"};
+        model = new DefaultTableModel(null, columnNames);
+        table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        table.setFillsViewportHeight(true);
+        JScrollPane scrollPane = new JScrollPane(table);
+        rightComponent.add(scrollPane ,"cell 0 0,grow");
+        
+		JTree tree = new JTree();
+		tree.setLayout(new MigLayout());
+		tree.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("Object Repository") {
+				{
+					DefaultMutableTreeNode node_1;
+					node_1 = new DefaultMutableTreeNode("Repository 1");
+						node_1.add(new DefaultMutableTreeNode("Main Page"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("Repository 2");
+						node_1.add(new DefaultMutableTreeNode("Second Page"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("Repository 3");
+						node_1.add(new DefaultMutableTreeNode("Third Page"));
+					add(node_1);
+				}
+			}
+		));
+		tree.setForeground(SystemColor.inactiveCaptionBorder);
+		tree.setBackground(Color.WHITE);
+		leftComponent.add(tree, "flowx,Pos 20 50 10 10,grow, width 150!, height 200!");
 
 
 
-		JPanel p = new JPanel();
-
-		p.setOpaque(false);
-		p.add(new JButton("hiiii"));
 		tp.addTab(null, icon, splitPane);
 		VTextIcon textIcon2 = new VTextIcon(panel, "Requirements",  VTextIcon.ROTATE_LEFT);
 		CompositeIcon icon2 = new CompositeIcon(graphicIcon, textIcon2);

@@ -147,10 +147,11 @@ public class AdminLanding extends JPanel
             ListSelectionModel lsm = listUser.getSelectionModel();
             int firstSelected = lsm.getMinSelectionIndex();
             int lastSelected = lsm.getMaxSelectionIndex();
-            listModelUser.removeRange(firstSelected, lastSelected);
-            
- 
-            int size = listModelUser.size();
+            int index = listUser.getSelectedIndex();
+            String s = (String) listUser.getSelectedValue();
+            c1.removeItem(s);
+             listModelUser.removeRange(firstSelected, lastSelected);
+             int size = listModelUser.size();
  
             if (size == 0) {
                 deleteButton.setEnabled(false);
@@ -159,6 +160,7 @@ public class AdminLanding extends JPanel
                     firstSelected--;
                 }
                 listUser.setSelectedIndex(firstSelected);
+
             }
             
             
@@ -170,6 +172,9 @@ public class AdminLanding extends JPanel
             ListSelectionModel lsm1 = listProject.getSelectionModel();
             int firstSelected1 = lsm1.getMinSelectionIndex();
             int lastSelected1 = lsm1.getMaxSelectionIndex();
+            int index = listProject.getSelectedIndex();
+            String s1 = (String) listProject.getSelectedValue();
+            c.removeItem(s1);
             listModelProject.removeRange(firstSelected1, lastSelected1);
             int size1 = listModelProject.size();
             if (size1 == 0) {

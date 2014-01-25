@@ -137,7 +137,9 @@ public class Test implements SwingConstants {
                 if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
                     JPopupMenu popup = new JPopupMenu();
                     JMenuItem mntmCopyRow = new JMenuItem("Copy Row");
+                    JMenuItem mntmCopyRow1 = new JMenuItem("Delete Row");
                     popup.add(mntmCopyRow);
+                    popup.add(mntmCopyRow1);
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }

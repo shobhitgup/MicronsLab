@@ -2,44 +2,39 @@ package com.example;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTree;
-import java.awt.SystemColor;
-
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.Color;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.JTable;
-import javax.swing.JScrollBar;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
-import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import com.example.CompositeIcon;
+import com.example.VTextIcon;
 
 public class Test implements SwingConstants {
 	private JTable table;
+	JTree tree;
 	int height;
 	public static void main(String[] args) {
 		new Test();
@@ -80,29 +75,76 @@ public class Test implements SwingConstants {
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
-		JButton button = new JButton("Add");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		leftComponent.add(button, "flowx,cell 0 0");
+		ImageIcon water = new ImageIcon("C:\\Users\\shobhit.gupta\\Desktop\\download.jpg");
+	    JButton button = new JButton(water);
+	    button.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		JFrame fr = new JFrame("Add Repository");
+	    		fr.setLayout(new MigLayout());
+	    		JLabel label = new JLabel("Repository Name");
+	    		JButton buttonadd = new JButton("Add");
+	    		final JTextField reponame = new JTextField();
+	    		fr.add(label,"Pos 20 30 0 0");
+	    		fr.add(reponame,"Pos 120 27 0 0,width 100!, height 20!");
+	    		fr.add(buttonadd, "Pos 20 80 0 0, width 60!, height 20!");
+	    		fr.setSize(300, 300);
+	    		fr.setVisible(true);
+	    		
+	    		buttonadd.addActionListener(new ActionListener() {
+	    	    	public void actionPerformed(ActionEvent e) {
+	    	    		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+	    	    		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
+	    	    		root.add(new DefaultMutableTreeNode(reponame.getText().toString()));
+	    	    		model.reload(root);
+	    	    	}
+	    	    });
+	    		
+	    		
+	    		
+	    	}
+	    });
+	    
+		leftComponent.add(button, "flowx,cell 0 0, width 60!");
 		button.setBorderPainted(false);
 		
-		JPopupMenu popupMenu = new JPopupMenu();
-		addPopup(button, popupMenu);
+
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		popupMenu.add(lblNewLabel);
-		JButton button1 = new JButton("Delete");
-		leftComponent.add(button1, "cell 0 0");
+		ImageIcon water1 = new ImageIcon("C:\\Users\\shobhit.gupta\\Desktop\\delete.jpg");
+	    JButton button1 = new JButton(water1);
+		leftComponent.add(button1, "cell 0 0, width 60!");
 		button1.setBorderPainted(false);
 		
+		button1.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		JFrame fr = new JFrame("Delete Repository");
+	    		fr.setLayout(new MigLayout());
+	    		JLabel label = new JLabel("Repository Name");
+	    		JButton buttondel = new JButton("Delete");
+	    		final JTextField reponame = new JTextField();
+	    		fr.add(label,"Pos 20 30 0 0");
+	    		fr.add(reponame,"Pos 120 27 0 0,width 100!, height 20!");
+	    		fr.add(buttondel, "Pos 20 80 0 0, width 80!, height 20!");
+	    		fr.setSize(300, 300);
+	    		fr.setVisible(true);
+	    		
+	    		buttondel.addActionListener(new ActionListener() {
+	    	    	public void actionPerformed(ActionEvent e) {
+	    	    		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+	    	    		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
+	    	    		System.out.println(root);
+	    	    		root.removeFromParent();
+	    	    		model.reload(root);
+	    	    	}
+	    	    });
+	    		
+	    	}
+	    });
+	    
 		JComboBox comboBox = new JComboBox();
 		comboBox.setEditable(true);
 		leftComponent.add(comboBox, "cell 0 1,growx");
 		
-		JTree tree = new JTree();
+		tree = new JTree();
 		leftComponent.add(tree, "cell 0 2 2 1,grow");
 		
 		DefaultTableModel model ;
@@ -113,11 +155,6 @@ public class Test implements SwingConstants {
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(table);
-        
-        JPopupMenu popupMenu_1 = new JPopupMenu();
-        addPopup(table, popupMenu_1);
-        
-       
         rightComponent.add(scrollPane ,"cell 0 0,grow");
         
         /* http://stackoverflow.com/questions/3558293/java-swing-jtable-right-click-menu-how-do-i-get-it-to-select-aka-highlight-t */
@@ -154,21 +191,7 @@ public class Test implements SwingConstants {
 		panel.add(tp);
 		return panel;
 	}
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
+	
+	
 }
+

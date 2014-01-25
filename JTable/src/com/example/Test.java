@@ -49,21 +49,14 @@ public class Test implements SwingConstants {
 		VTextIcon textIcon = new VTextIcon(panel, "Object Repository",  VTextIcon.ROTATE_LEFT);
 		CompositeIcon icon = new CompositeIcon(graphicIcon, textIcon);
 
-		JPanel leftComponent = new JPanel(new MigLayout("width 200!", "[grow]", "[grow]"));
+		JPanel leftComponent = new JPanel(new MigLayout("width 200!", "[grow][][]", "[][grow]"));
 		JPanel rightComponent = new JPanel(new MigLayout("", "[grow]", "[grow]"));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
-		
-		JToolBar toolBar = new JToolBar("Still draggable");
 		JButton button = new JButton("Add");
+		leftComponent.add(button, "flowx,cell 0 0");
 		button.setBorderPainted(false);
-		JButton button1 = new JButton("Delete");
-		button1.setBorderPainted(false);
-		toolBar.add(button);
-		toolBar.add(button1);
-		
-		leftComponent.add(toolBar,"Pos 10 10 0 0,width 100!, height 20!");
 		
 		DefaultTableModel model ;
 		String[] columnNames = {"ObjectName","Object_Xpath"};
@@ -75,6 +68,7 @@ public class Test implements SwingConstants {
         rightComponent.add(scrollPane ,"cell 0 0,grow");
         
 		final JTree tree = new JTree();
+		leftComponent.add(tree, "cell 0 1, grow");
 		tree.setLayout(new MigLayout());
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Object Repository") {
@@ -102,11 +96,9 @@ public class Test implements SwingConstants {
 		));
 		tree.setForeground(SystemColor.inactiveCaptionBorder);
 		tree.setBackground(Color.WHITE);
-		
-		JScrollPane scrollTree = new JScrollPane(tree);
-		scrollTree.setViewportView(tree);
-
-		leftComponent.add(scrollTree, "flowx,Pos 20 50 10 10, width 150!,height 200!,grow");
+		JButton button1 = new JButton("Delete");
+		leftComponent.add(button1, "cell 0 0");
+		button1.setBorderPainted(false);
 
 
 

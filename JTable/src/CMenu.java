@@ -73,7 +73,7 @@ public class CMenu implements SwingConstants {
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
-		ImageIcon water = new ImageIcon("C:\\Users\\shobhit.gupta\\Desktop\\download.jpg");
+		ImageIcon water = new ImageIcon("../JTable/lib/download.jpg");
 	    JButton button = new JButton(water);
 	    button.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
@@ -107,7 +107,7 @@ public class CMenu implements SwingConstants {
 		
 
 		
-		ImageIcon water1 = new ImageIcon("C:\\Users\\shobhit.gupta\\Desktop\\delete.jpg");
+		ImageIcon water1 = new ImageIcon("../JTable/lib/delete.jpg");
 	    JButton button1 = new JButton(water1);
 		leftComponent.add(button1, "cell 0 0, width 60!");
 		button1.setBorderPainted(false);

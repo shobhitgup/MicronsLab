@@ -123,12 +123,12 @@ public class AdminLanding extends JPanel
         buttonPane.add(SP = new JLabel("Select User"),"Pos 300 250 0 0");
         buttonPane.add(deleteButton2 ,"Pos 380 222 0, width 100!, height 15!");
         buttonPane.add(c ,"Pos 100 267 0 0, width 150!");
-        c.addItem("Dummy Project");
-        c.addItem("Rabo");
+        //c.addItem("Dummy Project");
+        //c.addItem("Rabo");
         c.setSelectedIndex(-1);
         buttonPane.add(c1 ,"Pos 300 267 0 0, width 150!");
-        c1.addItem("Dummy User");
-        c1.addItem("Shobhit");
+        //c1.addItem("Dummy User");
+        //c1.addItem("Shobhit");
         c1.setSelectedIndex(-1);
         buttonPane.add(b ,"Pos 210 222 0 0, width 150!, height 15!");
         
@@ -148,6 +148,7 @@ public class AdminLanding extends JPanel
             int firstSelected = lsm.getMinSelectionIndex();
             int lastSelected = lsm.getMaxSelectionIndex();
             listModelUser.removeRange(firstSelected, lastSelected);
+            
  
             int size = listModelUser.size();
  
@@ -159,6 +160,8 @@ public class AdminLanding extends JPanel
                 }
                 listUser.setSelectedIndex(firstSelected);
             }
+            
+            
         }
     }
 
@@ -224,7 +227,10 @@ public class AdminLanding extends JPanel
             	listModelUser.insertElementAt(nameFieldUser.getText(), index2+1);
                 listUser.setSelectedIndex(index2+1);
 
-        }} else {Toolkit.getDefaultToolkit().beep();
+        }
+            c1.addItem(nameFieldUser.getText());
+            c1.setSelectedIndex(-1);
+            } else {Toolkit.getDefaultToolkit().beep();
         return;}
     }}
  
@@ -248,7 +254,10 @@ public class AdminLanding extends JPanel
                 listProject.setSelectedIndex(size3);} else {
                 listModelProject.insertElementAt(nameFieldProject.getText(), index3+1);
                 listProject.setSelectedIndex(index3+1);
-            }} else {Toolkit.getDefaultToolkit().beep();
+            }
+            c.addItem(nameFieldProject.getText());
+            c.setSelectedIndex(-1);
+            } else {Toolkit.getDefaultToolkit().beep();
             return;}
         } 
     }
@@ -261,24 +270,6 @@ public class AdminLanding extends JPanel
             	Toolkit.getDefaultToolkit().beep();
                 return;
             }
-            
-            ArrayList<String> data = new ArrayList<String>();
-
-                for (int i = model.getRowCount() - 1; i >= 0; --i) {
-                    for (int j = model.getColumnCount() - 1; j >= 0; --j) {
-                        System.out.println(model.getValueAt(i, j).toString() + model.getValueAt(i, j-1).toString());	
-                    	//data.add(model.getValueAt(i, j).toString());
-                    }
-                }
-                
-                for (int i = 0; i < model.getRowCount() - 1; i++) {
-                    for (int j = 0; j < model.getColumnCount() - 1; j++) {
-                        System.out.println(model.getValueAt(i, j).toString() + model.getValueAt(i, j-1).toString());	
-                    	//data.add(model.getValueAt(i, j).toString());
-                    }
-                }
-             
-
             
             model.insertRow(table.getRowCount(), new Object[]{selected.toString(),selected1.toString()});
             if (table.getRowCount() != 0)

@@ -1,7 +1,5 @@
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,7 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import net.miginfocom.swing.MigLayout;
@@ -21,7 +18,6 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
@@ -94,12 +90,13 @@ public class CMenu implements SwingConstants {
 
                 if (e.isPopupTrigger() && e.getComponent() instanceof JTree ) {
                 	final DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+                	System.out.println(selectedNode);
                 	
                 	try {
-         			   if(!selectedNode.isRoot()){
+         			   if(!selectedNode.isRoot() && selectedNode.isLeaf()){
          				  
-         				  JPopupMenu popup = new JPopupMenu();
-                          JMenuItem addprop = new JMenuItem("Add Property");
+         				  final JPopupMenu popup = new JPopupMenu();
+                          final JMenuItem addprop = new JMenuItem("Add Property");
                           popup.add(addprop);
                           popup.show(e.getComponent(), e.getX(), e.getY());
                           addprop.addActionListener(  
@@ -119,6 +116,7 @@ public class CMenu implements SwingConstants {
                           	        scrollPane.setVisible(true);
                           	        rightComponent.add(scrollPane ,"cell 0 0,grow");
                           	        rightComponent.revalidate();
+                          	      
                           	        
                           	        
                           	        table.addMouseListener(new MouseAdapter() {

@@ -5,12 +5,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -19,6 +18,7 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -33,6 +33,7 @@ import com.example.VTextIcon;
 public class CMenu implements SwingConstants {
 	private JTable table;
 	JTree tree;
+	DefaultTreeModel model;
 	int height;
 	public static void main(String[] args) {
 		new CMenu();
@@ -71,79 +72,54 @@ public class CMenu implements SwingConstants {
 		JPanel leftComponent = new JPanel(new MigLayout("", "[grow][][][]", "[][][grow]"));
 		JPanel rightComponent = new JPanel(new MigLayout("", "[grow]", "[grow]"));
 
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Object Repository");
+		final DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
+		
+		tree = new JTree(treeModel);
+		tree.getSelectionModel().setSelectionMode
+		        (TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.setShowsRootHandles(true);
+		leftComponent.add(new JScrollPane(tree), "cell 0 2 2 1,grow");
+		
+		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
 		ImageIcon water = new ImageIcon("../JTable/lib/download.jpg");
-	    JButton button = new JButton(water);
-	    button.addActionListener(new ActionListener() {
+	    JButton addButton = new JButton(water);
+	    addButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		JFrame fr = new JFrame("Add Repository");
-	    		fr.setLayout(new MigLayout());
-	    		JLabel label = new JLabel("Repository Name");
-	    		JButton buttonadd = new JButton("Add");
-	    		final JTextField reponame = new JTextField();
-	    		fr.add(label,"Pos 20 30 0 0");
-	    		fr.add(reponame,"Pos 120 27 0 0,width 100!, height 20!");
-	    		fr.add(buttonadd, "Pos 20 80 0 0, width 60!, height 20!");
-	    		fr.setSize(300, 300);
-	    		fr.setVisible(true);
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				System.out.println(node);
+			    
+			    if (node == null) {
+			      JOptionPane.showMessageDialog(tree, "Select a parent.", "Error",
+			          JOptionPane.ERROR_MESSAGE);
+			      return;
+			    }
+			    
+			    String name = JOptionPane.showInputDialog(tree, "Enter Name:");
+			    treeModel.insertNodeInto(new DefaultMutableTreeNode(name), node, node.getChildCount());
+	    	}});
 	    		
-	    		buttonadd.addActionListener(new ActionListener() {
-	    	    	public void actionPerformed(ActionEvent e) {
-	    	    		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-	    	    		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
-	    	    		root.add(new DefaultMutableTreeNode(reponame.getText().toString()));
-	    	    		model.reload(root);
-	    	    	}
-	    	    });
-	    		
-	    		
-	    		
-	    	}
-	    });
-	    
-		leftComponent.add(button, "flowx,cell 0 0, width 60!");
-		button.setBorderPainted(false);
-		
-
+		leftComponent.add(addButton, "flowx,cell 0 0, width 60!");
+		addButton.setBorderPainted(false);
 		
 		ImageIcon water1 = new ImageIcon("../JTable/lib/delete.jpg");
-	    JButton button1 = new JButton(water1);
-		leftComponent.add(button1, "cell 0 0, width 60!");
-		button1.setBorderPainted(false);
+	    JButton delButton = new JButton(water1);
+		leftComponent.add(delButton, "cell 0 0, width 60!");
+		delButton.setBorderPainted(false);
 		
-		button1.addActionListener(new ActionListener() {
+		delButton.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		JFrame fr = new JFrame("Delete Repository");
-	    		fr.setLayout(new MigLayout());
-	    		JLabel label = new JLabel("Repository Name");
-	    		JButton buttondel = new JButton("Delete");
-	    		final JTextField reponame = new JTextField();
-	    		fr.add(label,"Pos 20 30 0 0");
-	    		fr.add(reponame,"Pos 120 27 0 0,width 100!, height 20!");
-	    		fr.add(buttondel, "Pos 20 80 0 0, width 80!, height 20!");
-	    		fr.setSize(300, 300);
-	    		fr.setVisible(true);
-	    		
-	    		buttondel.addActionListener(new ActionListener() {
-	    	    	public void actionPerformed(ActionEvent e) {
-	    	    		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
-	    	    		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
-	    	    		System.out.println(root);
-	    	    		root.removeFromParent();
-	    	    		model.reload(root);
-	    	    	}
-	    	    });
-	    		
-	    	}
-	    });
+	    		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+	    	    if (selectedNode != null)
+	    	      treeModel.removeNodeFromParent(selectedNode);
+	    	}});
 	    
 		JComboBox comboBox = new JComboBox();
 		comboBox.setEditable(true);
 		leftComponent.add(comboBox, "cell 0 1,growx");
 		
-		tree = new JTree();
-		leftComponent.add(tree, "cell 0 2 2 1,grow");
 		
 		DefaultTableModel model ;
 		String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
@@ -191,4 +167,9 @@ public class CMenu implements SwingConstants {
 	}
 	
 	
+	
+	
+	
+	
 }
+

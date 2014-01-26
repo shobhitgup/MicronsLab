@@ -86,22 +86,8 @@ public class CMenu implements SwingConstants {
 		tree.setEditable(true);
 		leftComponent.add(new JScrollPane(tree), "cell 0 2 2 1,grow");
 		
-		  
-		
-		
-		
+	
 		tree.addMouseListener(new MouseAdapter() {
-			
-			public void valueChanged(TreeSelectionEvent e)  
-		    {  
-		        TreePath oldPath = e.getOldLeadSelectionPath();  
-		        TreePath newPath = e.getNewLeadSelectionPath();  
-		        System.out.println(oldPath);
-		        System.out.println(newPath);
-		        
-		        
-		    }  
-			
             @Override
             public void mouseReleased(MouseEvent e) {
                 	final DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();

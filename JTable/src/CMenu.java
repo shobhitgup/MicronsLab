@@ -1,8 +1,12 @@
 import java.awt.Dimension;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+
 import java.awt.GridLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -10,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -34,16 +39,22 @@ import com.example.VTextIcon;
 
 public class CMenu implements SwingConstants {
 	private JTable table;
+	TreePath leadPath;
+	TreePath oldPath;
+	TreePath currPath;
 	JTree tree;
 	DefaultTreeModel model;
 	int height;
+	JFrame fr;
 	JScrollPane scrollPane;
+	int i =0;
+	String ObjProparray[][] = new String[2][2];
 	public static void main(String[] args) {
 		new CMenu();
 	}
 
 	public CMenu() {
-		JFrame fr = new JFrame("Test");
+		 fr = new JFrame("Test");
 		fr.getContentPane().add(testComponent());
 		fr.setSize(new Dimension(600, 400));
 		fr.setVisible(true);
@@ -86,26 +97,38 @@ public class CMenu implements SwingConstants {
 		tree.setEditable(true);
 		leftComponent.add(new JScrollPane(tree), "cell 0 2 2 1,grow");
 		
+		tree.addTreeSelectionListener(new TreeSelectionListener(){
+		    public void valueChanged(TreeSelectionEvent e){ 
+		    	 leadPath = e.getNewLeadSelectionPath();
+		    	 oldPath = e.getOldLeadSelectionPath();
+		    	 System.out.println(leadPath);
+		    	 System.out.println(oldPath);
+		    }
+		});
+			    
+		  	
+
 	
-		tree.addMouseListener(new MouseAdapter() {
+		tree.addMouseListener(new MouseAdapter()  {
             @Override
             public void mouseReleased(MouseEvent e) {
                 	final DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
                 	try {
          			   if(!selectedNode.isRoot() && selectedNode.isLeaf()){
          				  if (e.getClickCount() == 2){
-         					 
-         					 DefaultTableModel model ;
-                   			String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
-                   			Object[][] data = {{"ObjectName","1"}, {"ObjectName","2"}, {"ObjectName","3"}};
-                   			
-                   	        model = new DefaultTableModel(data, columnNames);
-                   	        table = new JTable(model);
-                   	        table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-                   	        table.setFillsViewportHeight(true);
-                   	        scrollPane = new JScrollPane(table);
-                   	        rightComponent.add(scrollPane ,"cell 0 0,grow");
-                   	        rightComponent.revalidate();
+         					  	
+         					  	DefaultTableModel model;
+         					 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
+         					 	Object[][] data = {{"1","1"}};
+         					 	model = new DefaultTableModel(data, columnNames);
+         					 	table = new JTable(model);
+         					 	table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+         					 	table.setFillsViewportHeight(true);
+         					 	scrollPane = new JScrollPane(table);
+         		 	         	rightComponent.add(scrollPane ,"cell 0 0,grow");
+         					  	rightComponent.setVisible(true);
+                       	        rightComponent.revalidate();
+                       	        rightComponent.repaint();
                    	        
                    	        table.addMouseListener(new MouseAdapter() {
                                @Override
@@ -132,12 +155,13 @@ public class CMenu implements SwingConstants {
          				  } 
          				  }else
          				  {
-         	        			scrollPane.setVisible(false);
-         	        			rightComponent.remove(scrollPane);
+         	        			//scrollPane.setVisible(false);
+         	        			rightComponent.removeAll();
          	        			rightComponent.revalidate();
+         	        			rightComponent.repaint();
          				  }
          			   } catch (NullPointerException f)
-         			   {}
+         			   {} 
                 
             }
         });
@@ -146,16 +170,100 @@ public class CMenu implements SwingConstants {
 				leftComponent, rightComponent);
 		ImageIcon water = new ImageIcon("../JTable/lib/download.jpg");
 	    JButton addButton = new JButton(water);
-	    addButton.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-			    if (node == null) {
-			      JOptionPane.showMessageDialog(tree, "Select a parent.", "Error",
-			          JOptionPane.ERROR_MESSAGE);
-			      return;
-			    }
-			    treeModel.insertNodeInto(new DefaultMutableTreeNode("New"), node, node.getChildCount());
-	    	}});
+	    
+	    addButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+				final DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent(); 
+				if (node == null) {
+				      JOptionPane.showMessageDialog(tree, "Select a parent.", "Error",
+				          JOptionPane.ERROR_MESSAGE);
+				      return;}
+                    JPopupMenu popup = new JPopupMenu();
+                    JMenuItem addObj = new JMenuItem("Add Object");
+                    popup.add(addObj);
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                    
+                    addObj.addActionListener(new ActionListener() {
+                    	@Override
+            			public void actionPerformed(ActionEvent f)  {
+                    		JFrame f1 = new JFrame();
+                    		f1.getContentPane().setLayout(new MigLayout());
+                    		//fr.setVisible(false);
+                    		JLabel ObjName = new JLabel("Object Name");
+                    		JLabel ObjProp = new JLabel("Object Property"); 
+                    		final JTextField ObjNameText = new JTextField(); 
+                    		final JTextField ObjPropText = new JTextField(); 
+                    		JButton add = new JButton("Add Property");
+                    		f1.getContentPane().add(ObjName,"Pos 10 10 0 0,width 70!, height 20!");
+                    		f1.getContentPane().add(ObjNameText,"Pos 100 10 0 0,width 70!, height 20!");
+                    		f1.getContentPane().add(ObjProp,"Pos 10 40 0 0,width 100!, height 20!");
+                    		f1.getContentPane().add(ObjPropText,"Pos 100 40 0 0,width 70!, height 20!");
+                    		f1.getContentPane().add(add,"Pos 100 80 0 0,width 100!, height 20!");
+                    		
+                    		add.addActionListener
+                        	(new ActionListener() 
+                        		{
+                        			@Override
+                        			public void actionPerformed(ActionEvent e) 
+                        			{
+                        				treeModel.insertNodeInto(new DefaultMutableTreeNode(ObjNameText.getText().toString()), node, node.getChildCount());
+                        				ObjProparray[i][0] = ObjNameText.getText().toString();
+                        				ObjProparray[i][1] = ObjPropText.getText().toString();
+                        				
+                        			}
+                        		}
+                        	); 
+                    		
+                    		f1.setSize(new Dimension(400, 400));
+                    		f1.setVisible(true);
+                        }
+                        });
+
+                    
+                    //addObj.addActionListener
+                	//(new ActionListener() 
+                		//{
+            				//@Override
+                			//public void actionPerformed(ActionEvent e) 
+                			//{
+                				//treeModel.insertNodeInto(new DefaultMutableTreeNode("New"), node, node.getChildCount());
+                			//}
+                		//}
+                	//); 
+                    
+                
+            }});
+	    
+	    
+	    
+	    
+	    //addButton.addActionListener(new ActionListener() {
+	    	//public void actionPerformed(ActionEvent e) {
+				//final DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+			    //if (node == null) {
+			      //JOptionPane.showMessageDialog(tree, "Select a parent.", "Error",
+			          //JOptionPane.ERROR_MESSAGE);
+			      //return;
+			    //}
+			    
+			    //JPopupMenu popup = new JPopupMenu();
+                //JMenuItem mntmCopyRow2 = new JMenuItem("Delete Row");
+                //popup.add(mntmCopyRow2);
+                //popup.setVisible(true);
+                //mntmCopyRow2.addActionListener
+            	//(new ActionListener() 
+            		//{
+            			//@SuppressWarnings("static-access")
+        				//@Override
+            			//public void actionPerformed(ActionEvent e) 
+            			//{
+            				//treeModel.insertNodeInto(new DefaultMutableTreeNode("New"), node, node.getChildCount());
+            			//}
+            		//}
+            	//); 
+			    
+	    	//}});
 	    		
 		leftComponent.add(addButton, "flowx,cell 0 0, width 60!");
 		addButton.setBorderPainted(false);

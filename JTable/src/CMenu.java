@@ -117,7 +117,7 @@ public class CMenu implements SwingConstants {
          			   if(!selectedNode.isRoot() && selectedNode.isLeaf()){
          				  if (e.getClickCount() == 2){
          					  	
-         					  	DefaultTableModel model;
+         					  DefaultTableModel model;
          					 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
          					 	Object[][] data = {{"1","1"}};
          					 	model = new DefaultTableModel(data, columnNames);
@@ -126,6 +126,7 @@ public class CMenu implements SwingConstants {
          					 	table.setFillsViewportHeight(true);
          					 	scrollPane = new JScrollPane(table);
          		 	         	rightComponent.add(scrollPane ,"cell 0 0,grow");
+         		 	        
          					  	rightComponent.setVisible(true);
                        	        rightComponent.revalidate();
                        	        rightComponent.repaint();
@@ -179,14 +180,14 @@ public class CMenu implements SwingConstants {
 				      JOptionPane.showMessageDialog(tree, "Select a parent.", "Error",
 				          JOptionPane.ERROR_MESSAGE);
 				      return;}
-                    JPopupMenu popup = new JPopupMenu();
-                    JMenuItem addObj = new JMenuItem("Add Object");
-                    popup.add(addObj);
-                    popup.show(e.getComponent(), e.getX(), e.getY());
-                    
-                    addObj.addActionListener(new ActionListener() {
-                    	@Override
-            			public void actionPerformed(ActionEvent f)  {
+//                    JPopupMenu popup = new JPopupMenu();
+//                    JMenuItem addObj = new JMenuItem("Add Object");
+//                    popup.add(addObj);
+//                    popup.show(e.getComponent(), e.getX(), e.getY());
+//                    
+//                    addObj.addActionListener(new ActionListener() {
+//                    	@Override
+//            			public void actionPerformed(ActionEvent f)  {
                     		JFrame f1 = new JFrame();
                     		f1.getContentPane().setLayout(new MigLayout());
                     		//fr.setVisible(false);
@@ -217,8 +218,8 @@ public class CMenu implements SwingConstants {
                     		
                     		f1.setSize(new Dimension(400, 400));
                     		f1.setVisible(true);
-                        }
-                        });
+//                        }
+//                        });
 
                     
                     //addObj.addActionListener

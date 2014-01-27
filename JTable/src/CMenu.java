@@ -106,9 +106,6 @@ public class CMenu implements SwingConstants {
 		    }
 		});
 			    
-		  	
-
-	
 		tree.addMouseListener(new MouseAdapter()  {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -163,7 +160,6 @@ public class CMenu implements SwingConstants {
          				  }
          			   } catch (NullPointerException f)
          			   {} 
-                
             }
         });
 		
@@ -235,9 +231,6 @@ public class CMenu implements SwingConstants {
                     
                 
             }});
-	    
-	    
-	    
 	    
 	    //addButton.addActionListener(new ActionListener() {
 	    	//public void actionPerformed(ActionEvent e) {

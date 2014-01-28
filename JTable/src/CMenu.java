@@ -1,4 +1,6 @@
 import java.awt.Dimension;
+import java.awt.List;
+
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
@@ -32,6 +34,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import com.example.CompositeIcon;
@@ -48,7 +53,7 @@ public class CMenu implements SwingConstants {
 	JFrame fr;
 	JScrollPane scrollPane;
 	int i =0;
-	String ObjProparray[][] = new String[2][2];
+	String ObjProparray[][] = new String[20][20];
 	public static void main(String[] args) {
 		new CMenu();
 	}
@@ -207,7 +212,8 @@ public class CMenu implements SwingConstants {
                         				treeModel.insertNodeInto(new DefaultMutableTreeNode(ObjNameText.getText().toString()), node, node.getChildCount());
                         				ObjProparray[i][0] = ObjNameText.getText().toString();
                         				ObjProparray[i][1] = ObjPropText.getText().toString();
-                        				
+                        				System.out.println(i);
+                        				i++;
                         			}
                         		}
                         	); 

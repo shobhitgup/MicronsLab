@@ -1,9 +1,6 @@
 import java.awt.Dimension;
-import java.awt.List;
-
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-
 import java.awt.GridLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -22,7 +19,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -34,9 +30,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import com.example.CompositeIcon;
@@ -212,7 +205,7 @@ public class CMenu implements SwingConstants {
                         				treeModel.insertNodeInto(new DefaultMutableTreeNode(ObjNameText.getText().toString()), node, node.getChildCount());
                         				ObjProparray[i][0] = ObjNameText.getText().toString();
                         				ObjProparray[i][1] = ObjPropText.getText().toString();
-                        				System.out.println(i);
+                        				System.out.println(ObjProparray[i][0] + ObjProparray[i][1] );
                         				i++;
                         			}
                         		}

@@ -105,8 +105,6 @@ public class CMenu implements SwingConstants {
 		    	 oldPath = e.getOldLeadSelectionPath();
 		    }
 		});
-		
-		
 			    
 		tree.addMouseListener(new MouseAdapter()  {
             @Override
@@ -116,6 +114,12 @@ public class CMenu implements SwingConstants {
 
          			   if(!selectedNode.isRoot() && selectedNode.isLeaf()){
          				   if (e.getClickCount() == 2){
+         					  tree.addTreeSelectionListener(new TreeSelectionListener(){
+         						    public void valueChanged(TreeSelectionEvent e){ 
+         						    	 leadPath = e.getNewLeadSelectionPath();
+         						    	 oldPath = e.getOldLeadSelectionPath();
+         						    }
+         						});
          					   System.out.println(leadPath);
          					  System.out.println(oldPath);
          				  DefaultTableModel model;

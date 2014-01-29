@@ -52,6 +52,7 @@ public class CMenu implements SwingConstants {
 	int i =0;
 	String ObjProparray[][] = new String[20][3];
 	String data[][] = new String[20][2];
+	JComboBox comboBox;
 	public static void main(String[] args) {
 		new CMenu();
 	}
@@ -99,12 +100,12 @@ public class CMenu implements SwingConstants {
 		tree.setEditable(true);
 		leftComponent.add(new JScrollPane(tree), "cell 0 2 2 1,grow");
 		
-		tree.addTreeSelectionListener(new TreeSelectionListener(){
+		/*tree.addTreeSelectionListener(new TreeSelectionListener(){
 		    public void valueChanged(TreeSelectionEvent e){ 
 		    	 leadPath = e.getNewLeadSelectionPath();
 		    	 oldPath = e.getOldLeadSelectionPath();
 		    }
-		});
+		});*/
 			    
 		tree.addMouseListener(new MouseAdapter()  {
             @Override
@@ -268,9 +269,13 @@ public class CMenu implements SwingConstants {
                         				i++;
                      			        rightComponent.revalidate();
                      			        rightComponent.repaint();
-
-                        			}
-                        		}
+                     			        
+                     			        
+                     			       comboBox.addItem(ObjNameText.getText().toString());
+                     			      comboBox.setSelectedIndex(-1);
+                     			        
+                     		            
+                        		}}
                         	); 
                     		
                     		f1.setSize(new Dimension(400, 400));
@@ -334,9 +339,10 @@ public class CMenu implements SwingConstants {
 	    	    if (selectedNode != null)
 	    	      treeModel.removeNodeFromParent(selectedNode);
 	    	    	i--;
+	    	    	 comboBox.removeItem(selectedNode.toString());
 	    	}});
 	    
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		comboBox.setEditable(true);
 		leftComponent.add(comboBox, "cell 0 1,growx");
 

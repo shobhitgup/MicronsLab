@@ -116,6 +116,8 @@ public class CMenu implements SwingConstants {
 
          			   if(!selectedNode.isRoot() && selectedNode.isLeaf()){
          				   if (e.getClickCount() == 2){
+         					   System.out.println(leadPath);
+         					  System.out.println(oldPath);
          				  DefaultTableModel model;
          				 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
          				 	
@@ -192,9 +194,17 @@ public class CMenu implements SwingConstants {
          			   {} 
             }
         });
-			
-			
 		
+		tree.addMouseListener(new MouseAdapter()  {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	if (e.getClickCount() == 1){
+            	rightComponent.removeAll();
+     			rightComponent.revalidate();
+     			rightComponent.repaint();}
+            }
+        });
+			
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
 		ImageIcon water = new ImageIcon("../JTable/lib/download.jpg");

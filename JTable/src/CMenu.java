@@ -51,6 +51,7 @@ public class CMenu implements SwingConstants {
 	JScrollPane scrollPane;
 	int i =0;
 	String ObjProparray[][] = new String[20][3];
+	String data[][] = new String[20][2];
 	public static void main(String[] args) {
 		new CMenu();
 	}
@@ -117,7 +118,7 @@ public class CMenu implements SwingConstants {
          				   if (e.getClickCount() == 2){
          				  DefaultTableModel model;
          				 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
-         				 	final String data[][] = new String[20][2];
+         				 	
          				 	int j = ObjProparray.length;
          				 	for(int l = 0; l < j; l++)
          				 	{
@@ -318,6 +319,7 @@ public class CMenu implements SwingConstants {
 	    		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 	    	    if (selectedNode != null)
 	    	      treeModel.removeNodeFromParent(selectedNode);
+	    	    	i--;
 	    	}});
 	    
 		JComboBox comboBox = new JComboBox();

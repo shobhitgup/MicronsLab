@@ -1,4 +1,7 @@
 import java.awt.Dimension;
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import java.awt.GridLayout;
@@ -20,6 +23,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Position;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -46,7 +50,7 @@ public class CMenu implements SwingConstants {
 	JFrame fr;
 	JScrollPane scrollPane;
 	int i =0;
-	String ObjProparray[][] = new String[20][20];
+	String ObjProparray[][] = new String[20][3];
 	public static void main(String[] args) {
 		new CMenu();
 	}
@@ -83,8 +87,7 @@ public class CMenu implements SwingConstants {
 
 		JPanel leftComponent = new JPanel(new MigLayout("", "[grow][][][]", "[][][grow]"));
 		final JPanel rightComponent = new JPanel(new MigLayout("", "[grow]", "[grow]"));
-		//final JPanel rightComponent = new JPanel(new CardLayout());
-
+		
 		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("Object Repository");
 		final DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		
@@ -99,33 +102,62 @@ public class CMenu implements SwingConstants {
 		    public void valueChanged(TreeSelectionEvent e){ 
 		    	 leadPath = e.getNewLeadSelectionPath();
 		    	 oldPath = e.getOldLeadSelectionPath();
-		    	 System.out.println(leadPath);
-		    	 System.out.println(oldPath);
 		    }
 		});
+		
+		
 			    
 		tree.addMouseListener(new MouseAdapter()  {
             @Override
-            public void mouseReleased(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 	final DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
                 	try {
+
          			   if(!selectedNode.isRoot() && selectedNode.isLeaf()){
-         				  if (e.getClickCount() == 2){
-         					  	
-         					  DefaultTableModel model;
-         					 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
-         					 	Object[][] data = {{"1","1"}};
-         					 	model = new DefaultTableModel(data, columnNames);
-         					 	table = new JTable(model);
-         					 	table.setPreferredScrollableViewportSize(new Dimension(500, 70));
-         					 	table.setFillsViewportHeight(true);
-         					 	scrollPane = new JScrollPane(table);
-         		 	         	rightComponent.add(scrollPane ,"cell 0 0,grow");
-         		 	        
-         					  	rightComponent.setVisible(true);
-                       	        rightComponent.revalidate();
-                       	        rightComponent.repaint();
-                   	        
+         				   if (e.getClickCount() == 2){
+         				  DefaultTableModel model;
+         				 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
+         				 	final String data[][] = new String[20][2];
+         				 	int j = ObjProparray.length;
+         				 	for(int l = 0; l < j; l++)
+         				 	{
+         				 		if (ObjProparray[l][2].toString().equals(selectedNode.toString())){
+         				 			data [0][0] = (ObjProparray[l][0]);
+         				 			data [0][1] = (ObjProparray[l][1]);
+         				 			break;
+         				 		}
+         				 	}
+         				 	
+         				 	model = new DefaultTableModel(data, columnNames);
+         				 	table = new JTable(model);
+         				 	table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+         				 	table.setFillsViewportHeight(true);
+         				 	scrollPane = new JScrollPane(table);
+         				 	rightComponent.add(scrollPane ,"cell 0 0,grow");
+         				  	rightComponent.setVisible(true);
+         			        rightComponent.revalidate();
+         			        rightComponent.repaint();
+         			        
+         			       table.getModel().addTableModelListener(new TableModelListener() {
+
+         				      public void tableChanged(TableModelEvent e) {
+         				    	 int row = table.getSelectedRow();
+         				    	 int col = table.getSelectedColumn();
+         				         
+         				        int j = ObjProparray.length;
+             				 	for(int l = 0; l < j; l++)
+             				 	{
+             				 		if (ObjProparray[l][2].toString().equals(selectedNode.toString())){
+             				 			if (col == 0){ObjProparray[l][0] = table.getValueAt(row, col).toString();}
+             				 			else
+             				 			{ObjProparray[l][1] = table.getValueAt(row, col).toString();}
+             				 			break;
+             				 		}
+             				 	}
+         				      }
+         				    });
+         				
+         			        
                    	        table.addMouseListener(new MouseAdapter() {
                                @Override
                                public void mouseReleased(MouseEvent e) {
@@ -148,10 +180,9 @@ public class CMenu implements SwingConstants {
                                        popup.show(e.getComponent(), e.getX(), e.getY());
                                    }
                                }});
-         				  } 
-         				  }else
+         				  
+         				  }}else
          				  {
-         	        			//scrollPane.setVisible(false);
          	        			rightComponent.removeAll();
          	        			rightComponent.revalidate();
          	        			rightComponent.repaint();
@@ -160,6 +191,8 @@ public class CMenu implements SwingConstants {
          			   {} 
             }
         });
+			
+			
 		
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				leftComponent, rightComponent);
@@ -203,10 +236,24 @@ public class CMenu implements SwingConstants {
                         			public void actionPerformed(ActionEvent e) 
                         			{
                         				treeModel.insertNodeInto(new DefaultMutableTreeNode(ObjNameText.getText().toString()), node, node.getChildCount());
+                        				
+                        				for (int i = 0; i < tree.getRowCount(); i++) {
+                        				    tree.expandRow(i);
+                        				}
+                        				
+                        				TreePath path = tree.getNextMatch(ObjNameText.getText().toString(), 0, Position.Bias.Forward);                        				
+                        				tree.scrollPathToVisible(path);
+                        				tree.setSelectionPath(path);
+                        				tree.setExpandsSelectedPaths(true);
+                        				tree.expandPath(path);
+                        				final DefaultMutableTreeNode node1 = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent(); 
                         				ObjProparray[i][0] = ObjNameText.getText().toString();
                         				ObjProparray[i][1] = ObjPropText.getText().toString();
-                        				System.out.println(ObjProparray[i][0] + ObjProparray[i][1] );
+                        				ObjProparray[i][2] = node1.toString();
                         				i++;
+                     			        rightComponent.revalidate();
+                     			        rightComponent.repaint();
+
                         			}
                         		}
                         	); 

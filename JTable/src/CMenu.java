@@ -1,5 +1,4 @@
 import java.awt.Dimension;
-
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -51,14 +50,15 @@ public class CMenu implements SwingConstants {
 	JScrollPane scrollPane;
 	int i =0;
 	String ObjProparray[][] = new String[20][3];
-	String data[][] = new String[20][2];
+	//String data[][] = new String[20][4];
 	JComboBox comboBox;
+	int j2 =0;
 	public static void main(String[] args) {
 		new CMenu();
 	}
 
 	public CMenu() {
-		 fr = new JFrame("Test");
+		fr = new JFrame("Test");
 		fr.getContentPane().add(testComponent());
 		fr.setSize(new Dimension(600, 400));
 		fr.setVisible(true);
@@ -121,18 +121,22 @@ public class CMenu implements SwingConstants {
          						    	 oldPath = e.getOldLeadSelectionPath();
          						    }
          						});
-         					   System.out.println(leadPath);
+         					  
+         					  System.out.println(leadPath);
          					  System.out.println(oldPath);
-         				  DefaultTableModel model;
-         				 	String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
+         					  DefaultTableModel model;
+         					  String[] columnNames = {"ObjectName","Identifier1","Identifier2","Identifier3", "Identifier4", "Identifier5","Identifier6","Identifier7"};
          				 	
          				 	int j = ObjProparray.length;
+         				 	String data[][] = new String[20][4];
          				 	for(int l = 0; l < j; l++)
          				 	{
          				 		if (ObjProparray[l][2].toString().equals(selectedNode.toString())){
          				 			data [0][0] = (ObjProparray[l][0]);
          				 			data [0][1] = (ObjProparray[l][1]);
-         				 			break;
+/*         				 			data [l+1][0] = (ObjProparray[l+1][0]);
+         				 			data [l+1][1] = (ObjProparray[l+1][1]);
+*/         				 			break;
          				 		}
          				 	}
          				 	
@@ -151,18 +155,31 @@ public class CMenu implements SwingConstants {
          				      public void tableChanged(TableModelEvent e) {
          				    	 int row = table.getSelectedRow();
          				    	 int col = table.getSelectedColumn();
-         				         
+
          				        int j = ObjProparray.length;
+         				       
              				 	for(int l = 0; l < j; l++)
+             				 	{ /*if (row > 0){
+             				 		if (ObjProparray[l][2].toString().equals(selectedNode.toString())){
+             				 			if (col == 0){ObjProparray[l+1][0] = table.getValueAt(row, col).toString();
+             				 			System.out.println(ObjProparray[l+1][0]);
+             				 			System.out.println(ObjProparray[l][0]);}
+             				 			else
+             				 			{ObjProparray[l+1][1] = table.getValueAt(row, col).toString();
+             				 			System.out.println(ObjProparray[l+1][1]);
+             				 			System.out.println(ObjProparray[l][1]);}
+             				 			break;
+             				 		}
+             				 	} else*/
              				 	{
              				 		if (ObjProparray[l][2].toString().equals(selectedNode.toString())){
              				 			if (col == 0){ObjProparray[l][0] = table.getValueAt(row, col).toString();}
              				 			else
              				 			{ObjProparray[l][1] = table.getValueAt(row, col).toString();}
              				 			break;
-             				 		}
              				 	}
          				      }
+         				      }}
          				    });
          				
          			        
@@ -231,7 +248,7 @@ public class CMenu implements SwingConstants {
 //                    addObj.addActionListener(new ActionListener() {
 //                    	@Override
 //            			public void actionPerformed(ActionEvent f)  {
-                    		JFrame f1 = new JFrame();
+                    		final JFrame f1 = new JFrame();
                     		f1.getContentPane().setLayout(new MigLayout());
                     		//fr.setVisible(false);
                     		JLabel ObjName = new JLabel("Object Name");
@@ -267,14 +284,29 @@ public class CMenu implements SwingConstants {
                         				ObjProparray[i][1] = ObjPropText.getText().toString();
                         				ObjProparray[i][2] = node1.toString();
                         				i++;
+                        				
                      			        rightComponent.revalidate();
                      			        rightComponent.repaint();
+                     			        comboBox.addItem(ObjNameText.getText().toString() + "- " + ObjPropText.getText().toString());
+                     			        comboBox.setSelectedIndex(-1);
+                     			        f1.dispose();
                      			        
-                     			        
-                     			       comboBox.addItem(ObjNameText.getText().toString());
-                     			      comboBox.setSelectedIndex(-1);
-                     			        
-                     		            
+/*                     			       TreeCellRenderer cr = tree.getCellRenderer();
+                     			      if (cr instanceof DefaultTreeCellRenderer) {
+                     			    	  if (node1.isLeaf()){
+                     			        DefaultTreeCellRenderer dtcr =
+                     			                     (DefaultTreeCellRenderer)cr; 
+
+                     			        // Set the various colors
+                     			        //dtcr.setIcon(icon);
+                     			        dtcr.setBackgroundSelectionColor(Color.black);
+                     			        //dtcr.getIcon(node);
+                     			        //dtcr.setTextSelectionColor(Color.white); 
+                     			        //dtcr.setTextNonSelectionColor(Color.green); 
+
+                     			        // Finally, set the tree's background color 
+                     			        //node1.setBackground(Color.black); 
+                     			      } }*/
                         		}}
                         	); 
                     		
@@ -345,6 +377,14 @@ public class CMenu implements SwingConstants {
 		comboBox = new JComboBox();
 		comboBox.setEditable(true);
 		leftComponent.add(comboBox, "cell 0 1,growx");
+		
+		delButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+			rightComponent.removeAll();
+			rightComponent.revalidate();
+			rightComponent.repaint();
+            }});
 
 		/* http://stackoverflow.com/questions/3558293/java-swing-jtable-right-click-menu-how-do-i-get-it-to-select-aka-highlight-t */
         

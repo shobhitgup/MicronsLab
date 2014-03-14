@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/miglayout-4.0-swt.jar"/>
 	<classpathentry kind="lib" path="lib/miglayout-4.0.jar"/>
 	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
+	<classpathentry kind="src" path="/Aephyr"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

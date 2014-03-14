@@ -22,7 +22,6 @@ public class MainLanding {
     pane.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
     
-    c.ipadx = 0;
     c.weighty = 0;
     c.weightx = 0;
     c.ipadx=0;
